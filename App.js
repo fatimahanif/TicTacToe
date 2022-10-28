@@ -7,23 +7,58 @@ export default function App() {
   //functions and variables
   function playTurn(index) {
     //displaying the move
-    let newList =  gameList.map((value, i)=>{
-      index===i ? value=turn.symbol : value
+    let newList =  gameList;
+    newList.forEach((value, i)=>{
+      index==i ? newList[index]=turn.symbol : value
     });
-    alert(newList)
-    // setGameList()
+    setGameList(newList);
 
     // changing player and symbol
+    turn.player==1 ? setTurn({player: 2, symbol: 'O'}) : setTurn({player: 1, symbol: 'X'});
 
-    alert('hi i am ' + index + turn.symbol);
+    // alert('hi i am ' + index + turn.symbol);
+
+    //checking game status
+    checkGame();
   }
 
-  const startGame= () => {
-    // setTurn(1)
-    // alert('this is start')
+  const checkGame = () => {
+    //defing rules
+    //rows
+    let row1 = gameList[0]!='' && gameList[0]===gameList[1] && gameList[1]===gameList[2]
+    let row2 = gameList[3]!='' && gameList[3]===gameList[4] && gameList[4]===gameList[5]
+    let row3 = gameList[6]!='' && gameList[6]===gameList[7] && gameList[7]===gameList[8]
+    //columns
+    let col1 = gameList[0]!='' && gameList[0]===gameList[3] && gameList[3]===gameList[6]
+    let col2 = gameList[1]!='' && gameList[1]===gameList[4] && gameList[4]===gameList[7]
+    let col3 = gameList[2]!='' && gameList[2]===gameList[5] && gameList[5]===gameList[8]
+    //diagonals
+    let diag1 = gameList[0]!='' && gameList[0]===gameList[4] && gameList[4]===gameList[8]
+    let diag2 = gameList[2]!='' && gameList[2]===gameList[4] && gameList[4]===gameList[6]
+    
+    //checking rows
+    if (row1) {alert('cond 1'); resetGame()}
+    if (row2) {alert('cond 2'); resetGame()}
+    if (row3) {alert('cond 3'); resetGame()}
+    if (col1) {alert('cond 4'); resetGame()}
+    if (col2) {alert('cond 5'); resetGame()}
+    if (col3) {alert('cond 6'); resetGame()}
+    if (diag1) {alert('cond 7'); resetGame()}
+    if (diag2) {alert('cond 8'); resetGame()}
+  }
+
+  const startGame = () => {
+    setGameList(['','','','','','','','','']);
+    setTurn({player: 1, symbol: 'X'})
+  }
+
+  const resetGame = () => {
+    setGameList(['','','','','','','','','']);
+    setTurn({player: 1, symbol: 'X'})
   }
 
   // setting variables for turn and game list
+  const [winner, setWinner] = useState('Draw');
   const [gameList, setGameList] = useState(['','','','','','','','','']);
   const [turn, setTurn] = useState({
     player: 1,
@@ -118,7 +153,7 @@ export default function App() {
         {/* start and reset buttons */}
         <View style={styles.btns_container} >
           <Button color='#51557E' title='Start' onPress={startGame} />
-          <Button color='#51557E' title='Reset' />
+          <Button color='#51557E' title='Reset' onPress={resetGame} />
         </View>
 
       </View>
