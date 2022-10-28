@@ -1,10 +1,38 @@
 import { StatusBar } from 'expo-status-bar';
+import { useState } from 'react';
 import { Button, Pressable, StyleSheet, Text, View } from 'react-native';
+import Constants from 'expo-constants';
 
 export default function App() {
-  const alertFunc = () => {
-    alert('hi i am here')
+  //functions and variables
+  function playTurn(index) {
+    //displaying the move
+    let newList =  gameList.map((value, i)=>{
+      index===i ? value=turn.symbol : value
+    });
+    alert(newList)
+    // setGameList()
+
+    // changing player and symbol
+
+    alert('hi i am ' + index + turn.symbol);
   }
+
+  const startGame= () => {
+    // setTurn(1)
+    // alert('this is start')
+  }
+
+  // setting variables for turn and game list
+  const [gameList, setGameList] = useState(['','','','','','','','','']);
+  const [turn, setTurn] = useState({
+    player: 1,
+    symbol: 'X'
+  });
+
+  
+
+
   return (
     <View style={styles.container}>
       {/* heading */}
@@ -14,7 +42,7 @@ export default function App() {
       <View style={styles.body}>
 
         {/* turn text */}
-        <Text style={styles.turn_txt} >Turn: Player 1</Text>
+        <Text style={styles.turn_txt} >Turn: Player {turn.player}</Text>
 
         {/* buttons grid */}
         <View style={styles.btn_grid}>
@@ -23,18 +51,18 @@ export default function App() {
           <View style={styles.btn_row}>
 
             {/* button 1 */}
-            <Pressable style={{ ...styles.button, ...styles.button_top, ...styles.button_left }} onPress={alertFunc} >
-              <Text style={styles.btn_text}>X</Text>
+            <Pressable style={{ ...styles.button, ...styles.button_top, ...styles.button_left }} onPress={() => {playTurn(0)}} disabled={gameList[0]!=''} >
+              <Text style={styles.btn_text}>{gameList[0]}</Text>
             </Pressable>
 
             {/* button 2 */}
-            <Pressable style={{ ...styles.button, ...styles.button_top }} onPress={alertFunc} >
-              <Text style={styles.btn_text}>O</Text>
+            <Pressable style={{ ...styles.button, ...styles.button_top }} onPress={() => {playTurn(1)}} disabled={gameList[1]!=''}>
+              <Text style={styles.btn_text}>{gameList[1]}</Text>
             </Pressable>
 
             {/* button 3 */}
-            <Pressable style={{ ...styles.button, ...styles.button_top, ...styles.button_right }} onPress={alertFunc} >
-              <Text style={styles.btn_text}>X</Text>
+            <Pressable style={{ ...styles.button, ...styles.button_top, ...styles.button_right }} onPress={() => {playTurn(2)}} disabled={gameList[2]!=''}>
+              <Text style={styles.btn_text}>{gameList[2]}</Text>
             </Pressable>
 
           </View>
@@ -43,18 +71,18 @@ export default function App() {
           <View style={styles.btn_row}>
 
             {/* button 4 */}
-            <Pressable style={{ ...styles.button, ...styles.button_left }} onPress={alertFunc} >
-              <Text style={styles.btn_text}>O</Text>
+            <Pressable style={{ ...styles.button, ...styles.button_left }} onPress={() => {playTurn(3)}} disabled={gameList[3]!=''}>
+              <Text style={styles.btn_text}>{gameList[3]}</Text>
             </Pressable>
 
             {/* button 5 */}
-            <Pressable style={styles.button} onPress={alertFunc} >
-              <Text style={styles.btn_text}>X</Text>
+            <Pressable style={styles.button} onPress={() => {playTurn(4)}} disabled={gameList[4]!=''}>
+              <Text style={styles.btn_text}>{gameList[4]}</Text>
             </Pressable>
 
             {/* button 6 */}
-            <Pressable style={{ ...styles.button, ...styles.button_right }} onPress={alertFunc} >
-              <Text style={styles.btn_text}>O</Text>
+            <Pressable style={{ ...styles.button, ...styles.button_right }} onPress={() => {playTurn(5)}} disabled={gameList[5]!=''}>
+              <Text style={styles.btn_text}>{gameList[5]}</Text>
             </Pressable>
 
           </View>
@@ -63,18 +91,18 @@ export default function App() {
           <View style={styles.btn_row}>
 
             {/* button 7 */}
-            <Pressable style={{ ...styles.button, ...styles.button_bottom, ...styles.button_left }} onPress={alertFunc} >
-              <Text style={styles.btn_text}>X</Text>
+            <Pressable style={{ ...styles.button, ...styles.button_bottom, ...styles.button_left }} onPress={() => {playTurn(6)}} disabled={gameList[6]!=''}>
+              <Text style={styles.btn_text}>{gameList[6]}</Text>
             </Pressable>
 
             {/* button 8 */}
-            <Pressable style={{ ...styles.button, ...styles.button_bottom }} onPress={alertFunc} >
-              <Text style={styles.btn_text}>O</Text>
+            <Pressable style={{ ...styles.button, ...styles.button_bottom }} onPress={() => {playTurn(7)}} disabled={gameList[7]!=''}>
+              <Text style={styles.btn_text}>{gameList[7]}</Text>
             </Pressable>
 
             {/* button 9 */}
-            <Pressable style={{ ...styles.button, ...styles.button_bottom, ...styles.button_right }} onPress={alertFunc} >
-              <Text style={styles.btn_text}>X</Text>
+            <Pressable style={{ ...styles.button, ...styles.button_bottom, ...styles.button_right }} onPress={() => {playTurn(8)}} disabled={gameList[8]!=''}>
+              <Text style={styles.btn_text}>{gameList[8]}</Text>
             </Pressable>
 
           </View>
@@ -87,6 +115,12 @@ export default function App() {
           <Text style={styles.player_txt} >Player 2: O</Text>
         </View>
 
+        {/* start and reset buttons */}
+        <View style={styles.btns_container} >
+          <Button color='#51557E' title='Start' onPress={startGame} />
+          <Button color='#51557E' title='Reset' />
+        </View>
+
       </View>
 
     </View>
@@ -97,7 +131,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1B2430',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: Constants.statusBarHeight,
   },
   body: {
     flex: 1,
@@ -160,5 +195,11 @@ const styles = StyleSheet.create({
     color: '#eee',
     fontSize: 22,
     textAlign: 'center',
+  },
+  btns_container: {
+    display: 'flex', 
+    flexDirection: 'row', 
+    justifyContent: 'space-around', 
+    marginTop: 30
   },
 });
