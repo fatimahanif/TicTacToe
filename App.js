@@ -7,14 +7,14 @@ export default function App() {
   //functions and variables
   function playTurn(index) {
     //displaying the move
-    let newList =  gameList;
-    newList.forEach((value, i)=>{
-      index==i ? newList[index]=turn.symbol : value
+    let newList = gameList;
+    newList.forEach((value, i) => {
+      index == i ? newList[index] = turn.symbol : value
     });
     setGameList(newList);
 
     // changing player and symbol
-    turn.player==1 ? setTurn({player: 2, symbol: 'O'}) : setTurn({player: 1, symbol: 'X'});
+    turn.player == 1 ? setTurn({ player: 2, symbol: 'O' }) : setTurn({ player: 1, symbol: 'X' });
 
     // alert('hi i am ' + index + turn.symbol);
 
@@ -25,55 +25,74 @@ export default function App() {
   const checkGame = () => {
     //defing rules
     //rows
-    let row1 = gameList[0]!='' && gameList[0]===gameList[1] && gameList[1]===gameList[2]
-    let row2 = gameList[3]!='' && gameList[3]===gameList[4] && gameList[4]===gameList[5]
-    let row3 = gameList[6]!='' && gameList[6]===gameList[7] && gameList[7]===gameList[8]
+    let row1 = gameList[0] != '' && gameList[0] === gameList[1] && gameList[1] === gameList[2];
+    let row2 = gameList[3] != '' && gameList[3] === gameList[4] && gameList[4] === gameList[5];
+    let row3 = gameList[6] != '' && gameList[6] === gameList[7] && gameList[7] === gameList[8];
     //columns
-    let col1 = gameList[0]!='' && gameList[0]===gameList[3] && gameList[3]===gameList[6]
-    let col2 = gameList[1]!='' && gameList[1]===gameList[4] && gameList[4]===gameList[7]
-    let col3 = gameList[2]!='' && gameList[2]===gameList[5] && gameList[5]===gameList[8]
+    let col1 = gameList[0] != '' && gameList[0] === gameList[3] && gameList[3] === gameList[6];
+    let col2 = gameList[1] != '' && gameList[1] === gameList[4] && gameList[4] === gameList[7];
+    let col3 = gameList[2] != '' && gameList[2] === gameList[5] && gameList[5] === gameList[8];
     //diagonals
-    let diag1 = gameList[0]!='' && gameList[0]===gameList[4] && gameList[4]===gameList[8]
-    let diag2 = gameList[2]!='' && gameList[2]===gameList[4] && gameList[4]===gameList[6]
-    
-    //checking rows
-    if (row1) {alert('cond 1'); resetGame()}
-    if (row2) {alert('cond 2'); resetGame()}
-    if (row3) {alert('cond 3'); resetGame()}
-    if (col1) {alert('cond 4'); resetGame()}
-    if (col2) {alert('cond 5'); resetGame()}
-    if (col3) {alert('cond 6'); resetGame()}
-    if (diag1) {alert('cond 7'); resetGame()}
-    if (diag2) {alert('cond 8'); resetGame()}
+    let diag1 = gameList[0] != '' && gameList[0] === gameList[4] && gameList[4] === gameList[8];
+    let diag2 = gameList[2] != '' && gameList[2] === gameList[4] && gameList[4] === gameList[6];
+
+    //checking rules
+    let rules = [row1, row2, row3, col1, col2, col3, diag1, diag2];
+
+    //checking winner if any
+    let winner = rules.findIndex((e => e == true));
+    if (winner > -1) {
+      // row 1, col 1 or diag 1
+      if (winner == 0 || winner == 3 || winner == 6) {
+        alert(gameList[0] + ' won !');
+      }
+      // col 3 or diag 2
+      else if (winner == 5 || winner == 7) {
+        alert(gameList[2] + ' won !');
+      }
+      // row 2 or col 2
+      else if (winner == 1 || winner == 4) {
+        alert(gameList[4] + ' won !');
+      }
+      // row 3
+      else if (winner == 2) {
+        alert(gameList[6] + ' won !');
+      }
+      //resetting the game
+      resetGame();
+    }
+    //checking draw
+    else if (gameList.filter(e => e != '').length == 9) {
+      alert('Game Draw!');
+      resetGame();
+    }
   }
 
   const startGame = () => {
-    setGameList(['','','','','','','','','']);
-    setTurn({player: 1, symbol: 'X'})
+    setGameList(['', '', '', '', '', '', '', '', '']);
+    setTurn({ player: 1, symbol: 'X' });
   }
 
   const resetGame = () => {
-    setGameList(['','','','','','','','','']);
-    setTurn({player: 1, symbol: 'X'})
+    setGameList(['', '', '', '', '', '', '', '', '']);
+    setTurn({ player: 1, symbol: 'X' });
   }
 
   // setting variables for turn and game list
   const [winner, setWinner] = useState('Draw');
-  const [gameList, setGameList] = useState(['','','','','','','','','']);
+  const [gameList, setGameList] = useState(['', '', '', '', '', '', '', '', '']);
   const [turn, setTurn] = useState({
     player: 1,
     symbol: 'X'
   });
 
-  
-
-
+// layout
   return (
     <View style={styles.container}>
       {/* heading */}
       <Text style={styles.heading}>Tic Tac Toe</Text>
 
-        {/* body container */}
+      {/* body container */}
       <View style={styles.body}>
 
         {/* turn text */}
@@ -86,17 +105,17 @@ export default function App() {
           <View style={styles.btn_row}>
 
             {/* button 1 */}
-            <Pressable style={{ ...styles.button, ...styles.button_top, ...styles.button_left }} onPress={() => {playTurn(0)}} disabled={gameList[0]!=''} >
+            <Pressable style={{ ...styles.button, ...styles.button_top, ...styles.button_left }} onPress={() => { playTurn(0) }} disabled={gameList[0] != ''} >
               <Text style={styles.btn_text}>{gameList[0]}</Text>
             </Pressable>
 
             {/* button 2 */}
-            <Pressable style={{ ...styles.button, ...styles.button_top }} onPress={() => {playTurn(1)}} disabled={gameList[1]!=''}>
+            <Pressable style={{ ...styles.button, ...styles.button_top }} onPress={() => { playTurn(1) }} disabled={gameList[1] != ''}>
               <Text style={styles.btn_text}>{gameList[1]}</Text>
             </Pressable>
 
             {/* button 3 */}
-            <Pressable style={{ ...styles.button, ...styles.button_top, ...styles.button_right }} onPress={() => {playTurn(2)}} disabled={gameList[2]!=''}>
+            <Pressable style={{ ...styles.button, ...styles.button_top, ...styles.button_right }} onPress={() => { playTurn(2) }} disabled={gameList[2] != ''}>
               <Text style={styles.btn_text}>{gameList[2]}</Text>
             </Pressable>
 
@@ -106,17 +125,17 @@ export default function App() {
           <View style={styles.btn_row}>
 
             {/* button 4 */}
-            <Pressable style={{ ...styles.button, ...styles.button_left }} onPress={() => {playTurn(3)}} disabled={gameList[3]!=''}>
+            <Pressable style={{ ...styles.button, ...styles.button_left }} onPress={() => { playTurn(3) }} disabled={gameList[3] != ''}>
               <Text style={styles.btn_text}>{gameList[3]}</Text>
             </Pressable>
 
             {/* button 5 */}
-            <Pressable style={styles.button} onPress={() => {playTurn(4)}} disabled={gameList[4]!=''}>
+            <Pressable style={styles.button} onPress={() => { playTurn(4) }} disabled={gameList[4] != ''}>
               <Text style={styles.btn_text}>{gameList[4]}</Text>
             </Pressable>
 
             {/* button 6 */}
-            <Pressable style={{ ...styles.button, ...styles.button_right }} onPress={() => {playTurn(5)}} disabled={gameList[5]!=''}>
+            <Pressable style={{ ...styles.button, ...styles.button_right }} onPress={() => { playTurn(5) }} disabled={gameList[5] != ''}>
               <Text style={styles.btn_text}>{gameList[5]}</Text>
             </Pressable>
 
@@ -126,17 +145,17 @@ export default function App() {
           <View style={styles.btn_row}>
 
             {/* button 7 */}
-            <Pressable style={{ ...styles.button, ...styles.button_bottom, ...styles.button_left }} onPress={() => {playTurn(6)}} disabled={gameList[6]!=''}>
+            <Pressable style={{ ...styles.button, ...styles.button_bottom, ...styles.button_left }} onPress={() => { playTurn(6) }} disabled={gameList[6] != ''}>
               <Text style={styles.btn_text}>{gameList[6]}</Text>
             </Pressable>
 
             {/* button 8 */}
-            <Pressable style={{ ...styles.button, ...styles.button_bottom }} onPress={() => {playTurn(7)}} disabled={gameList[7]!=''}>
+            <Pressable style={{ ...styles.button, ...styles.button_bottom }} onPress={() => { playTurn(7) }} disabled={gameList[7] != ''}>
               <Text style={styles.btn_text}>{gameList[7]}</Text>
             </Pressable>
 
             {/* button 9 */}
-            <Pressable style={{ ...styles.button, ...styles.button_bottom, ...styles.button_right }} onPress={() => {playTurn(8)}} disabled={gameList[8]!=''}>
+            <Pressable style={{ ...styles.button, ...styles.button_bottom, ...styles.button_right }} onPress={() => { playTurn(8) }} disabled={gameList[8] != ''}>
               <Text style={styles.btn_text}>{gameList[8]}</Text>
             </Pressable>
 
@@ -232,9 +251,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   btns_container: {
-    display: 'flex', 
-    flexDirection: 'row', 
-    justifyContent: 'space-around', 
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginTop: 30
   },
 });
